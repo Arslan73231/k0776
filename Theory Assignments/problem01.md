@@ -1,3 +1,2 @@
-
-[Uploading img1.pdf…]()
-[Uploading img2.pdf…]()
+![Uploading img1.jpg…]()
+![Uploading img2.jpg…]()
