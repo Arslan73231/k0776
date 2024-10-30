@@ -12,5 +12,6 @@ Screenshot of Output
 ![image](https://github.com/user-attachments/assets/b08a81c5-19a4-4406-bbb6-84317a085843)
 
 Lessons Learned
+
 This problem taught me how to manage string inputs effectively and manipulate multidimensional arrays.
 I also gained insight into searching algorithms and their implementation in C.
