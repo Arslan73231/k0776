@@ -8,7 +8,8 @@ The grid is displayed after each move, and the game continues until the player d
 
 Screenshot of Output
 
-![image](https://github.com/user-attachments/assets/37829c00-5e6e-4706-9e5b-da79aaae23f0)
+![image](https://github.com/user-attachments/assets/c3b7e00f-fe9d-41aa-aac6-cfc0e55b7c63)
+
 
 
 Lessons Learned
