@@ -1,3 +1,7 @@
+// Name  : Arslan Rashid
+// Roll no : 24k - 0776
+// Instructor : Sir Farooque 
+
 #include <stdio.h>
 
 int main() {
