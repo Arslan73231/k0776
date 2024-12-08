@@ -3,169 +3,169 @@
 #include <string.h>
 
 typedef struct {
-    float temperature;
-    float rainfall;
+    float tempValue;
+    float rainData;
     float windSpeed;
-} Weather;
+} Climate;
 
 typedef struct {
-    char cropType[50];
-    char growthStage[50];
-    float expectedYield;
-    Weather* weatherForecasts; 
-    int numForecasts;
-} Crop;
+    char cropName[50];
+    char currentStage[50];
+    float yieldEstimate;
+    Climate* forecastData; 
+    int forecastCount;
+} Plantation;
 
 typedef struct {
-    char equipmentName[50];
-    char operationalStatus[20];
-    float fuelLevel;
-    char activitySchedule[100];
-} Equipment;
+    char machineName[50];
+    char status[20];
+    float fuelPercentage;
+    char operationPlan[100];
+} Machinery;
 
 typedef struct {
-    float soilNutrients;
-    float pHLevel;
-    float pestActivity;
-} Sensor;
+    float nutrientLevel;
+    float soilAcidity;
+    float pestConcentration;
+} Monitor;
 
 typedef struct {
-    float latitude;
-    float longitude;
-    float soilHealth;
-    float moistureLevel;
-    Crop* crops;           
-    Equipment* equipment;  
-    Sensor* sensors;  
-    int numCrops;
-    int numEquipment;
-    int numSensors;
-} Field;
+    float coordLat;
+    float coordLong;
+    float healthMetric;
+    float waterContent;
+    Plantation* plantations;           
+    Machinery* devices;  
+    Monitor* monitors;  
+    int plantationCount;
+    int deviceCount;
+    int monitorCount;
+} Area;
 
 typedef struct {
-    char regionName[50];
-    Field* fields;         
-    int numFields;
-    float yieldPrediction;
-    float resourceDistribution;
-    char emergencyPlan[200];
-} RegionalHub;
+    char zoneTitle[50];
+    Area* areas;         
+    int areaCount;
+    float outputProjection;
+    float resourceAllocation;
+    char disasterResponse[200];
+} AgroHub;
 
-void initializeField(Field* field, int numCrops, int numEquipment, int numSensors);
-void initializeRegionalHub(RegionalHub* hub, const char* name, int numFields);
-void addCrop(Field* field, const char* cropType, const char* growthStage, float yield, int numForecasts);
-void addEquipment(Field* field, const char* equipmentName, const char* status, float fuel, const char* schedule);
-void addSensor(Field* field, float nutrients, float pH, float pests);
-void displayRegionalHub(const RegionalHub* hub);
-void freeField(Field* field);
-void freeRegionalHub(RegionalHub* hub);
+void setupArea(Area* area, int plantationCount, int deviceCount, int monitorCount);
+void setupAgroHub(AgroHub* hub, const char* title, int areaCount);
+void addPlantation(Area* area, const char* cropName, const char* stage, float yield, int forecastCount);
+void addMachinery(Area* area, const char* machineName, const char* status, float fuel, const char* plan);
+void addMonitor(Area* area, float nutrients, float acidity, float pests);
+void showAgroHub(const AgroHub* hub);
+void releaseArea(Area* area);
+void releaseAgroHub(AgroHub* hub);
 
 int main() {
-    RegionalHub hub;
-    initializeRegionalHub(&hub, "Northern Region", 2);
+    AgroHub hub;
+    setupAgroHub(&hub, "Northern Agro Zone", 2);
 
-    initializeField(&hub.fields[0], 2, 2, 2);
-    addCrop(&hub.fields[0], "Wheat", "Flowering", 1200.5, 3);
-    addCrop(&hub.fields[0], "Barley", "Mature", 900.8, 2);
-    addEquipment(&hub.fields[0], "Autonomous Tractor", "Active", 80.0, "Daily tilling");
-    addSensor(&hub.fields[0], 6.5, 7.0, 0.3);
+    setupArea(&hub.areas[0], 2, 2, 2);
+    addPlantation(&hub.areas[0], "Wheat", "Flowering", 1200.5, 3);
+    addPlantation(&hub.areas[0], "Barley", "Mature", 900.8, 2);
+    addMachinery(&hub.areas[0], "Self-driving Tractor", "Operational", 80.0, "Daily Tillage");
+    addMonitor(&hub.areas[0], 6.5, 7.0, 0.3);
 
-    initializeField(&hub.fields[1], 1, 1, 1);
-    addCrop(&hub.fields[1], "Corn", "Seeding", 1500.3, 2);
-    addEquipment(&hub.fields[1], "Irrigation System", "Inactive", 0.0, "Under maintenance");
-    addSensor(&hub.fields[1], 7.8, 6.2, 0.1);
-    displayRegionalHub(&hub);
-    freeRegionalHub(&hub);
+    setupArea(&hub.areas[1], 1, 1, 1);
+    addPlantation(&hub.areas[1], "Corn", "Seeding", 1500.3, 2);
+    addMachinery(&hub.areas[1], "Sprinkler System", "Not Active", 0.0, "Repair Scheduled");
+    addMonitor(&hub.areas[1], 7.8, 6.2, 0.1);
+    showAgroHub(&hub);
+    releaseAgroHub(&hub);
 
     return 0;
 }
 
-void initializeField(Field* field, int numCrops, int numEquipment, int numSensors) {
-    field->latitude = field->longitude = 0.0;
-    field->soilHealth = field->moistureLevel = 0.0;
-    field->numCrops = numCrops;
-    field->numEquipment = numEquipment;
-    field->numSensors = numSensors;
-    field->crops = (Crop*)malloc(numCrops * sizeof(Crop));
-    field->equipment = (Equipment*)malloc(numEquipment * sizeof(Equipment));
-    field->sensors = (Sensor*)malloc(numSensors * sizeof(Sensor));
+void setupArea(Area* area, int plantationCount, int deviceCount, int monitorCount) {
+    area->coordLat = area->coordLong = 0.0;
+    area->healthMetric = area->waterContent = 0.0;
+    area->plantationCount = plantationCount;
+    area->deviceCount = deviceCount;
+    area->monitorCount = monitorCount;
+    area->plantations = (Plantation*)malloc(plantationCount * sizeof(Plantation));
+    area->devices = (Machinery*)malloc(deviceCount * sizeof(Machinery));
+    area->monitors = (Monitor*)malloc(monitorCount * sizeof(Monitor));
 }
 
-void initializeRegionalHub(RegionalHub* hub, const char* name, int numFields) {
-    strcpy(hub->regionName, name);
-    hub->numFields = numFields;
-    hub->fields = (Field*)malloc(numFields * sizeof(Field));
-    hub->yieldPrediction = hub->resourceDistribution = 0.0;
-    strcpy(hub->emergencyPlan, "No emergency plan defined.");
+void setupAgroHub(AgroHub* hub, const char* title, int areaCount) {
+    strcpy(hub->zoneTitle, title);
+    hub->areaCount = areaCount;
+    hub->areas = (Area*)malloc(areaCount * sizeof(Area));
+    hub->outputProjection = hub->resourceAllocation = 0.0;
+    strcpy(hub->disasterResponse, "No disaster response plan defined.");
 }
 
-void addCrop(Field* field, const char* cropType, const char* growthStage, float yield, int numForecasts) {
-    static int cropIndex = 0;
-    if (cropIndex >= field->numCrops) return;
-    Crop* crop = &field->crops[cropIndex++];
-    strcpy(crop->cropType, cropType);
-    strcpy(crop->growthStage, growthStage);
-    crop->expectedYield = yield;
-    crop->numForecasts = numForecasts;
-    crop->weatherForecasts = (Weather*)malloc(numForecasts * sizeof(Weather));
+void addPlantation(Area* area, const char* cropName, const char* stage, float yield, int forecastCount) {
+    static int plantationIndex = 0;
+    if (plantationIndex >= area->plantationCount) return;
+    Plantation* plantation = &area->plantations[plantationIndex++];
+    strcpy(plantation->cropName, cropName);
+    strcpy(plantation->currentStage, stage);
+    plantation->yieldEstimate = yield;
+    plantation->forecastCount = forecastCount;
+    plantation->forecastData = (Climate*)malloc(forecastCount * sizeof(Climate));
 }
 
-void addEquipment(Field* field, const char* equipmentName, const char* status, float fuel, const char* schedule) {
-    static int equipIndex = 0;
-    if (equipIndex >= field->numEquipment) return;
-    Equipment* equip = &field->equipment[equipIndex++];
-    strcpy(equip->equipmentName, equipmentName);
-    strcpy(equip->operationalStatus, status);
-    equip->fuelLevel = fuel;
-    strcpy(equip->activitySchedule, schedule);
+void addMachinery(Area* area, const char* machineName, const char* status, float fuel, const char* plan) {
+    static int deviceIndex = 0;
+    if (deviceIndex >= area->deviceCount) return;
+    Machinery* device = &area->devices[deviceIndex++];
+    strcpy(device->machineName, machineName);
+    strcpy(device->status, status);
+    device->fuelPercentage = fuel;
+    strcpy(device->operationPlan, plan);
 }
 
-void addSensor(Field* field, float nutrients, float pH, float pests) {
-    static int sensorIndex = 0;
-    if (sensorIndex >= field->numSensors) return;
-    Sensor* sensor = &field->sensors[sensorIndex++];
-    sensor->soilNutrients = nutrients;
-    sensor->pHLevel = pH;
-    sensor->pestActivity = pests;
+void addMonitor(Area* area, float nutrients, float acidity, float pests) {
+    static int monitorIndex = 0;
+    if (monitorIndex >= area->monitorCount) return;
+    Monitor* monitor = &area->monitors[monitorIndex++];
+    monitor->nutrientLevel = nutrients;
+    monitor->soilAcidity = acidity;
+    monitor->pestConcentration = pests;
 }
 
-void displayRegionalHub(const RegionalHub* hub) {
-    printf("Regional Hub: %s\n", hub->regionName);
-    printf("Yield Prediction: %.2f\n", hub->yieldPrediction);
-    printf("Resource Distribution: %.2f\n", hub->resourceDistribution);
-    printf("Emergency Plan: %s\n\n", hub->emergencyPlan);
-    for (int i = 0; i < hub->numFields; ++i) {
-        printf("Field %d:\n", i + 1);
-        printf("  Location: (%.2f, %.2f)\n", hub->fields[i].latitude, hub->fields[i].longitude);
-        printf("  Soil Health: %.2f, Moisture: %.2f\n", hub->fields[i].soilHealth, hub->fields[i].moistureLevel);
-        printf("  Crops:\n");
-        for (int j = 0; j < hub->fields[i].numCrops; ++j) {
-            printf("    %s (%s), Yield: %.2f\n", hub->fields[i].crops[j].cropType, hub->fields[i].crops[j].growthStage, hub->fields[i].crops[j].expectedYield);
+void showAgroHub(const AgroHub* hub) {
+    printf("Agro Zone: %s\n", hub->zoneTitle);
+    printf("Projected Output: %.2f\n", hub->outputProjection);
+    printf("Allocated Resources: %.2f\n", hub->resourceAllocation);
+    printf("Disaster Response Plan: %s\n\n", hub->disasterResponse);
+    for (int i = 0; i < hub->areaCount; ++i) {
+        printf("Area %d:\n", i + 1);
+        printf("  Coordinates: (%.2f, %.2f)\n", hub->areas[i].coordLat, hub->areas[i].coordLong);
+        printf("  Health: %.2f, Water Content: %.2f\n", hub->areas[i].healthMetric, hub->areas[i].waterContent);
+        printf("  Plantations:\n");
+        for (int j = 0; j < hub->areas[i].plantationCount; ++j) {
+            printf("    %s (%s), Estimated Yield: %.2f\n", hub->areas[i].plantations[j].cropName, hub->areas[i].plantations[j].currentStage, hub->areas[i].plantations[j].yieldEstimate);
         }
-        printf("  Equipment:\n");
-        for (int j = 0; j < hub->fields[i].numEquipment; ++j) {
-            printf("    %s (%s), Fuel: %.2f\n", hub->fields[i].equipment[j].equipmentName, hub->fields[i].equipment[j].operationalStatus, hub->fields[i].equipment[j].fuelLevel);
+        printf("  Machinery:\n");
+        for (int j = 0; j < hub->areas[i].deviceCount; ++j) {
+            printf("    %s (%s), Fuel Level: %.2f\n", hub->areas[i].devices[j].machineName, hub->areas[i].devices[j].status, hub->areas[i].devices[j].fuelPercentage);
         }
-        printf("  Sensors:\n");
-        for (int j = 0; j < hub->fields[i].numSensors; ++j) {
-            printf("    Nutrients: %.2f, pH: %.2f, Pests: %.2f\n", hub->fields[i].sensors[j].soilNutrients, hub->fields[i].sensors[j].pHLevel, hub->fields[i].sensors[j].pestActivity);
+        printf("  Monitors:\n");
+        for (int j = 0; j < hub->areas[i].monitorCount; ++j) {
+            printf("    Nutrients: %.2f, Acidity: %.2f, Pests: %.2f\n", hub->areas[i].monitors[j].nutrientLevel, hub->areas[i].monitors[j].soilAcidity, hub->areas[i].monitors[j].pestConcentration);
         }
         printf("\n");
     }
 }
 
-void freeField(Field* field) {
-    for (int i = 0; i < field->numCrops; ++i) {
-        free(field->crops[i].weatherForecasts);
+void releaseArea(Area* area) {
+    for (int i = 0; i < area->plantationCount; ++i) {
+        free(area->plantations[i].forecastData);
     }
-    free(field->crops);
-    free(field->equipment);
-    free(field->sensors);
+    free(area->plantations);
+    free(area->devices);
+    free(area->monitors);
 }
 
-void freeRegionalHub(RegionalHub* hub) {
-    for (int i = 0; i < hub->numFields; ++i) {
-        freeField(&hub->fields[i]);
+void releaseAgroHub(AgroHub* hub) {
+    for (int i = 0; i < hub->areaCount; ++i) {
+        releaseArea(&hub->areas[i]);
     }
-    free(hub->fields);
+    free(hub->areas);
 }
