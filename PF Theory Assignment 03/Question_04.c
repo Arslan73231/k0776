@@ -2,94 +2,105 @@
 #include <stdlib.h>
 
 typedef struct {
-    int* ratings;
-    int totalScore;
-} Employee;
-void inputEmployees(int** ratings, int numEmployees, int numPeriods) {
-    for (int i = 0; i < numEmployees; i++) {
-        for (int j = 0; j < numPeriods; j++) {
+    int* scores;
+    int totalPoints;
+} TeamMember;
+
+void collectScores(int** scores, int totalMembers, int totalPeriods) {
+    for (int i = 0; i < totalMembers; i++) {
+        for (int j = 0; j < totalPeriods; j++) {
             do {
-                printf("Enter rating for Employee %d, Period %d (1-10): ", i + 1, j + 1);
-                scanf("%d", &ratings[i][j]);
-            } while (ratings[i][j] < 1 || ratings[i][j] > 10);
+                printf("Enter score for Team Member %d, Phase %d (1-10): ", i + 1, j + 1);
+                scanf("%d", &scores[i][j]);
+            } while (scores[i][j] < 1 || scores[i][j] > 10);
         }
     }
 }
-void displayPerformance(int** ratings, int numEmployees, int numPeriods) {
-    for (int i = 0; i < numEmployees; i++) {
-        printf("Employee %d Ratings: ", i + 1);
-        for (int j = 0; j < numPeriods; j++) {
-            printf("%d ", ratings[i][j]);
+
+void displayScores(int** scores, int totalMembers, int totalPeriods) {
+    for (int i = 0; i < totalMembers; i++) {
+        printf("Team Member %d Scores: ", i + 1);
+        for (int j = 0; j < totalPeriods; j++) {
+            printf("%d ", scores[i][j]);
         }
         printf("\n");
     }
 }
-int findEmployeeOfTheYear(int** ratings, int numEmployees, int numPeriods) {
-    int bestEmployee = 0;
-    float highestAverage = 0.0;
-    for (int i = 0; i < numEmployees; i++) {
-        float total = 0.0;
-        for (int j = 0; j < numPeriods; j++) {
-            total += ratings[i][j];
+
+int topPerformer(int** scores, int totalMembers, int totalPeriods) {
+    int bestMember = 0;
+    float highestAvg = 0.0;
+    for (int i = 0; i < totalMembers; i++) {
+        float sum = 0.0;
+        for (int j = 0; j < totalPeriods; j++) {
+            sum += scores[i][j];
         }
-        float average = total / numPeriods;
-        if (average > highestAverage) {
-            highestAverage = average;
-            bestEmployee = i;
-        }
-    }
-    return bestEmployee;
-}
-int findHighestRatedPeriod(int** ratings, int numEmployees, int numPeriods) {
-    int bestPeriod = 0;
-    float highestAverage = 0.0;
-    for (int j = 0; j < numPeriods; j++) {
-        float total = 0.0;
-        for (int i = 0; i < numEmployees; i++) {
-            total += ratings[i][j];
-        }
-        float average = total / numEmployees;
-        if (average > highestAverage) {
-            highestAverage = average;
-            bestPeriod = j;
+        float avg = sum / totalPeriods;
+        if (avg > highestAvg) {
+            highestAvg = avg;
+            bestMember = i;
         }
     }
-    return bestPeriod;
+    return bestMember;
 }
-int findWorstPerformingEmployee(int** ratings, int numEmployees, int numPeriods) {
-    int worstEmployee = 0;
-    float lowestAverage = 10.0;
-    for (int i = 0; i < numEmployees; i++) {
-        float total = 0.0;
-        for (int j = 0; j < numPeriods; j++) {
-            total += ratings[i][j];
+
+int bestPhase(int** scores, int totalMembers, int totalPeriods) {
+    int topPhase = 0;
+    float maxAvg = 0.0;
+    for (int j = 0; j < totalPeriods; j++) {
+        float sum = 0.0;
+        for (int i = 0; i < totalMembers; i++) {
+            sum += scores[i][j];
         }
-        float average = total / numPeriods;
-        if (average < lowestAverage) {
-            lowestAverage = average;
-            worstEmployee = i;
+        float avg = sum / totalMembers;
+        if (avg > maxAvg) {
+            maxAvg = avg;
+            topPhase = j;
         }
     }
-    return worstEmployee;
+    return topPhase;
 }
+
+int leastPerformer(int** scores, int totalMembers, int totalPeriods) {
+    int worstMember = 0;
+    float lowestAvg = 10.0;
+    for (int i = 0; i < totalMembers; i++) {
+        float sum = 0.0;
+        for (int j = 0; j < totalPeriods; j++) {
+            sum += scores[i][j];
+        }
+        float avg = sum / totalPeriods;
+        if (avg < lowestAvg) {
+            lowestAvg = avg;
+            worstMember = i;
+        }
+    }
+    return worstMember;
+}
+
 int main() {
-    int numEmployees = 3;
-    int numPeriods = 4;
-    int** ratings = (int**)malloc(numEmployees * sizeof(int*));
-    for (int i = 0; i < numEmployees; i++) {
-        ratings[i] = (int*)malloc(numPeriods * sizeof(int));
+    int totalMembers = 3;
+    int totalPeriods = 4;
+    int** scores = (int**)malloc(totalMembers * sizeof(int*));
+    for (int i = 0; i < totalMembers; i++) {
+        scores[i] = (int*)malloc(totalPeriods * sizeof(int));
     }
-    inputEmployees(ratings, numEmployees, numPeriods);
-    displayPerformance(ratings, numEmployees, numPeriods);
-    int employeeOfTheYear = findEmployeeOfTheYear(ratings, numEmployees, numPeriods);
-    printf("Employee of the Year: Employee %d\n", employeeOfTheYear + 1);
-    int highestRatedPeriod = findHighestRatedPeriod(ratings, numEmployees, numPeriods);
-    printf("Highest Rated Period: Period %d\n", highestRatedPeriod + 1);
-    int worstEmployee = findWorstPerformingEmployee(ratings, numEmployees, numPeriods);
-    printf("Worst Performing Employee: Employee %d\n", worstEmployee + 1);
-    for (int i = 0; i < numEmployees; i++) {
-        free(ratings[i]);
+
+    collectScores(scores, totalMembers, totalPeriods);
+    displayScores(scores, totalMembers, totalPeriods);
+
+    int bestMember = topPerformer(scores, totalMembers, totalPeriods);
+    printf("Top Performer: Team Member %d\n", bestMember + 1);
+
+    int topPhase = bestPhase(scores, totalMembers, totalPeriods);
+    printf("Best Phase: Phase %d\n", topPhase + 1);
+
+    int worstMember = leastPerformer(scores, totalMembers, totalPeriods);
+    printf("Least Performing Team Member: Team Member %d\n", worstMember + 1);
+
+    for (int i = 0; i < totalMembers; i++) {
+        free(scores[i]);
     }
-    free(ratings);
+    free(scores);
     return 0;
 }
