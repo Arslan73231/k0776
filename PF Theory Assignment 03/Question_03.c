@@ -2,49 +2,48 @@
 #include <stdlib.h>
 #include <string.h>
 
-void validateEmail(char *email) {
-    int atCount = 0, dotCount = 0, atPosition = -1, dotPosition = -1;
-    int length = strlen(email);
+void checkEmailFormat(char *inputEmail) {
+    int atSymbolCount = 0, periodCount = 0, atLocation = -1, periodLocation = -1;
+    int emailLength = strlen(inputEmail);
 
-    // Check for '@' and '.' in valid positions
-    for (int i = 0; i < length; i++) {
-        if (email[i] == '@') {
-            atCount++;
-            atPosition = i;
-        } else if (email[i] == '.') {
-            dotCount++;
-            dotPosition = i;
-        } else if (email[i] == ' ' || email[i] == '-') { 
+    for (int i = 0; i < emailLength; i++) {
+        if (inputEmail[i] == '@') {
+            atSymbolCount++;
+            atLocation = i;
+        } else if (inputEmail[i] == '.') {
+            periodCount++;
+            periodLocation = i;
+        } else if (inputEmail[i] == ' ' || inputEmail[i] == '-') {
             // Invalid characters
-            printf("Invalid Email: Contains invalid characters.\n");
+            printf("Error: Email contains disallowed characters.\n");
             return;
         }
     }
 
-    // Validation checks
-    if (atCount != 1 || dotCount < 1) {
-        printf("Invalid Email: '@' or '.' missing or incorrect.\n");
+
+    if (atSymbolCount != 1 || periodCount < 1) {
+        printf("Error: Missing or incorrect '@' or '.' symbols.\n");
         return;
     }
-    if (atPosition < 1 || dotPosition < atPosition + 2 || dotPosition >= length - 1) {
-        printf("Invalid Email: Invalid '@' or '.' position.\n");
+    if (atLocation < 1 || periodLocation < atLocation + 2 || periodLocation >= emailLength - 1) {
+        printf("Error: Incorrect placement of '@' or '.' in the email.\n");
         return;
     }
 
-    printf("Valid Email\n");
+    printf("The email address is valid.\n");
 }
 
 int main() {
-    char *email = (char *)malloc(100 * sizeof(char));
-    if (email == NULL) {
-        printf("Memory allocation failed\n");
+    char *userEmail = (char *)malloc(100 * sizeof(char));
+    if (userEmail == NULL) {
+        printf("System Error: Unable to allocate memory.\n");
         return 1;
     }
 
-    printf("Enter your email: ");
-    scanf("%s", email);
+    printf("Please provide your email address: ");
+    scanf("%s", userEmail);
 
-    validateEmail(email);
-    free(email);
+    checkEmailFormat(userEmail);
+    free(userEmail);
     return 0;
 }
